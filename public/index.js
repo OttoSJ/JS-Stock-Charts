@@ -1,3 +1,5 @@
+//  I was unable to complete the second chart on my own and still am unable to render the highest stock correctly above the chart
+
 async function main() {
     const timeChartCanvas = document.querySelector('#time-chart');
     const highestPriceChartCanvas = document.querySelector('#highest-price-chart');
@@ -36,47 +38,67 @@ async function main() {
         type: 'bar',
         data: {
             labels: stocks.map(value => value.meta.symbol),
-            datasets:  ({
-                label: getHighest(stocks),
-                data:  getHighest(stocks),
-                backgroundColor: getColor(stock.meta.symbol),
-                borderColor: getColor(stock.meta.symbol),
-                borderWidth: 1
+            datasets:  [{
+                label: "Highest",
+                backgroundColor: stocks.map(stock =>(
+                    getColor(stock.meta.symbol)
+                )),
+                borderColor: stocks.map(stock =>(
+                    getColor(stock.meta.symbol)
+                )),
+                data:  stocks.map(stock => (
+                    highest(stock.values)
+                ))
+
             
-            })
+            }]
 
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
+      
     });
-    function getHighest(arr1){
-       return arr1.sort((arr1, arr2) => arr1.values.high - arr2.values.high)
-    }
 
-    console.log(getHighest(stocks))
-    function getColor(stock) {
-        if (stock === "GME") {
-            return `rgba(61, 161, 61, 0.7)`
-        }
-        if (stock === "MSFT") {
-            return `rgba(209, 4, 25, 0.7)`
-        }
-        if (stock === "DIS") {
-            return `rgba(18, 4, 209, 0.7)`
-        }
-        if (stock === "BNTX") {
-            return `rgba(166, 43, 158, 0.7)`
-        }
-    }
-    let dayTime = stocks[0].values.map(value => value.datetime)
-    console.log(dayTime)
+   ;
+
+
+    // let dayTime = stocks[0].values.map(value => value.datetime)
+    // console.log(dayTime)
+
+    // console.log(getHighest(stocks))
+   
 }
 
 main()
 
-console.log(Chart)
+function highest(values) {
+    let highest = 0;
+    values.forEach(value => {
+        if (parseFloat(value.high) > highest) {
+            highest = value.high
+        }
+    })
+    return highest
+} 
+function getColor(stock) {
+    if (stock === "GME") {
+        return `rgba(61, 161, 61, 0.7)`
+    }
+    if (stock === "MSFT") {
+        return `rgba(209, 4, 25, 0.7)`
+    }
+    if (stock === "DIS") {
+        return `rgba(18, 4, 209, 0.7)`
+    }
+    if (stock === "BNTX") {
+        return `rgba(166, 43, 158, 0.7)`
+    }
+}
+
+
+
+function getHighest(arr1){
+    return arr1.sort((a, b) => a - b)
+    // getHighest(stocks)
+}
+let array = [34, 45, 23, 67]
+let newArray = array.sort((a, b) => a - b)
+console.log(highest(array))
